@@ -32,14 +32,13 @@ public class GameManager : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		if (ball.transform.position.x <= outOfBoundsX)
+		if (ball.position.x <= outOfBoundsX)
 		{
 			int newLifePoints = int.Parse(lifePoints.text[..1]) - 1;
 			if (newLifePoints <= 0) GameLost();
 			lifePoints.text = newLifePoints == 1 ? "1 Live left!" : newLifePoints + " Lives left";
 			lifePoints.GetComponent<AudioSource>().Play();
 			ResetBall();
-			ResetPaddle();
 		}
 	}
 
@@ -52,12 +51,7 @@ public class GameManager : MonoBehaviour
 
 	private void ResetBall()
 	{
-		ball.transform.position = new Vector3(-4, 0.5f, 0);
+		ball.position = new Vector3(-4, 0.5f, paddle.position.z);
 		ball.gameObject.GetComponent<Ball>().Velocity = new Vector3(0, 0, 0);
-	}
-
-	private void ResetPaddle()
-	{
-		paddle.transform.position = new Vector3(-8, 0.5f, 0);
 	}
 }
