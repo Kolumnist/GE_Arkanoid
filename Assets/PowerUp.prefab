@@ -122,6 +122,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fallSpeed: -5
+  ballCopyPrefab: {fileID: 3928666967257468014, guid: 5562f4c77d551d04fa26e50cd0dde713, type: 3}
 --- !u!54 &601734967832537350
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -4,6 +4,7 @@ public class Ball : MonoBehaviour
 {
     public float startSpeed;
 	public float paddleDeviation;
+	public int hitStrength;
 
     private Vector3 velocity;
 	public Vector3 Velocity
@@ -66,8 +67,9 @@ public class Ball : MonoBehaviour
 				}
 				velocity = Vector3.Reflect(velocity, normale.normalized);
 				velocity *= 1.0025f;
-				other.GetComponent<Tile>().Hit();
+				other.GetComponent<Tile>().Hit(hitStrength);
 				return;
+
 			default: 
 				break;
 		}

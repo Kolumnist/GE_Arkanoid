@@ -46,6 +46,11 @@ public class Level : MonoBehaviour
 	private float zPosition;
 	private float xPosition;
 
+	public void LoadNewLevel()
+	{
+		PlaceCurrentLevel();
+	}
+
 	void Start()
 	{
 		levels[0] = levelOne;
@@ -71,11 +76,14 @@ public class Level : MonoBehaviour
 			{
 				GameObject tile = Instantiate(tilePrefab, new Vector3(xPosition, 0, zPosition), Quaternion.identity);
 				tile.GetComponent<Tile>().colorCounter = levels[currentLevel][i];
-				GameManager.tileCount++;
+				GameManager.Instance.tileCount++;
 			}
 
 			zPosition -= zSpaceBetween + tilePrefab.transform.localScale.z;
 		}
+
+		xPosition = topLeftCorner.Item1;
+		zPosition = topLeftCorner.Item2;
 	}
 
 }

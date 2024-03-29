@@ -24,17 +24,18 @@ public class Tile : MonoBehaviour
 		GetComponent<Renderer>().material.color = customColor;
 	}
 
-	public void Hit()
+	public void Hit(int hitStrength)
 	{
-		colorCounter++;
+		colorCounter += hitStrength;
 		if (colorCounter >= 3)
 		{
 			Destroy(gameObject);
 			GameManager.Instance.score.text = int.Parse(GameManager.Instance.score.text) + 10 + "";
 			
-			if (--GameManager.tileCount <= 0)
+			if (--GameManager.Instance.tileCount <= 0)
 			{
-
+				GameManager.Instance.LevelDone();
+				return;
 			}
 
 			if (Random.Range(0, 101) > 20)

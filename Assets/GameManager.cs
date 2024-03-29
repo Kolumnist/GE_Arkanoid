@@ -6,23 +6,26 @@ public class GameManager : MonoBehaviour
 {
 	public static GameManager Instance { get; private set; }
 
-	public static int tileCount = 0;
+	public int tileCount = 0;
 
 	public TMP_Text score;
 
 	public readonly float outOfBoundsX = -9;
 
+	public Transform ball;
+	public Transform paddle;
+
 	[SerializeField]
 	private TMP_Text lifePoints;
-	
-	[SerializeField]
-	private Transform ball;
-	
-	[SerializeField]
-	private Transform paddle;
 
 	[SerializeField]
 	private GameObject tilePrefab;
+
+	public void LevelDone()
+	{
+		if(++Level.currentLevel < 3)
+			gameObject.GetComponent<Level>().LoadNewLevel();
+	}
 
 	private void Awake()
 	{
