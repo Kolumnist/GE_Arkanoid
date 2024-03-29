@@ -1,32 +1,43 @@
-using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+	public static GameManager Instance { get; private set; }
+
+	public static int tileCount = 0;
+
+	public TMP_Text score;
+
+	public readonly float outOfBoundsX = -9;
+
 	[SerializeField]
 	private TMP_Text lifePoints;
+	
 	[SerializeField]
 	private Transform ball;
+	
 	[SerializeField]
 	private Transform paddle;
 
-	public static GameManager instance;
-	public readonly float outOfBoundsX = -9;
+	[SerializeField]
+	private GameObject tilePrefab;
 
 	private void Awake()
 	{
-		if (instance != null)
+		if (Instance != null && Instance != this)
 		{
-			Debug.LogError("");
 			Destroy(this);
 		}
-		instance = this;
+		else
+		{
+			Instance = this;
+		}
 	}
 
 	void Start()
-	{	
+	{
 	}
 
 	// Update is called once per frame
@@ -47,6 +58,7 @@ public class GameManager : MonoBehaviour
 		SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 		GetComponent<AudioSource>().Play();
 		//Some Timer till the next round so that the sound can play maybe even a start screen with blurred background and start button
+		//Invoke or Coroutine
 	}
 
 	private void ResetBall()

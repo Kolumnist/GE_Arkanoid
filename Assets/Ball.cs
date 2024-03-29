@@ -1,38 +1,34 @@
-using System;
-using TMPro;
 using UnityEngine;
 
 public class Ball : MonoBehaviour
 {
-    private Vector3 velocity;
-
-	public Vector3 Velocity {  
-		get => velocity; 
-		set =>
-			velocity = new Vector3(xMaxSpeed, 0, 0);
-	}
-
-    public float xMaxSpeed;
+    public float startSpeed;
 	public float paddleDeviation;
+
+    private Vector3 velocity;
+	public Vector3 Velocity
+	{
+		get => velocity;
+		set =>
+			velocity = new Vector3(startSpeed, 0, 0);
+	}
 
 	// Start is called before the first frame update
 	void Start()
     {
-        velocity = new Vector3(xMaxSpeed, 0, 0);
+        velocity = new Vector3(startSpeed, 0, 0);
     }
 
     // Update is called once per frame
     void Update()
     {
-		//s = v*t
 		transform.position += velocity * Time.deltaTime;
     }
 
 	private void OnTriggerEnter(Collider other)
 	{
-        GetComponent<AudioSource>().Play();
-
-        switch(other.transform.tag)
+		//GetComponent<AudioSource>().Play();
+		switch (other.transform.tag)
         {
             case ("Paddle"):
 				float actualDistance = transform.position.z - other.transform.position.z;
@@ -43,7 +39,7 @@ public class Ball : MonoBehaviour
 				velocity.z = velocity.magnitude * Mathf.Sin(angle);
 				velocity.x = velocity.magnitude * Mathf.Cos(angle);
 
-				velocity /= Mathf.Abs(velocity.magnitude / -xMaxSpeed);
+				velocity /= Mathf.Abs(velocity.magnitude / -startSpeed);
 				return;
 
 			case ("Wall"):
@@ -57,7 +53,6 @@ public class Ball : MonoBehaviour
 			case ("Tile"):
 				var collisionPoint = other.ClosestPoint(transform.position);
 				
-				//normale rechnung verbessern
 				var normale = transform.position-collisionPoint;
 				if (Mathf.Abs(normale.z) > Mathf.Abs(normale.x))
 				{
@@ -69,16 +64,12 @@ public class Ball : MonoBehaviour
 					normale.x /= Mathf.Abs(normale.x);
 					normale.z = 0;
 				}
-
 				velocity = Vector3.Reflect(velocity, normale.normalized);
-				velocity *= 1.01f;
-				Debug.Log(velocity.magnitude);
-
+				velocity *= 1.0025f;
 				other.GetComponent<Tile>().Hit();
 				return;
 			default: 
 				break;
 		}
 	}
-
 }

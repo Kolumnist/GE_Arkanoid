@@ -1,31 +1,52 @@
-using System.Collections;
-using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Tile : MonoBehaviour
-{
-	private Color[] tileColors = {
-		new Color(100, 100, 100),
-		new Color(255, 100, 0),
-		new Color(100, 0, 255),
-		new Color(0, 255, 100)
-	};
 
-	private int colorCounter = 0;
+{
+	[DoNotSerialize]
+	public int colorCounter;
+	
+	[SerializeField]
+	private GameObject powerUpPrefab;
+
+	private Color[] tileColors = {
+		Color.red,
+		Color.yellow,
+		Color.green,
+		Color.blue
+	};
 
 	private void Start()
 	{
-		colorCounter = Random.Range(0, 3);
+		Color customColor = tileColors[colorCounter];
+		GetComponent<Renderer>().material.color = customColor;
 	}
 
 	public void Hit()
 	{
 		colorCounter++;
-		//Debug.Log(colorCounter);
-		if (colorCounter > 3) Destroy(gameObject);
+		if (colorCounter >= 3)
+		{
+			Destroy(gameObject);
+			GameManager.Instance.score.text = int.Parse(GameManager.Instance.score.text) + 10 + "";
+			
+			if (--GameManager.tileCount <= 0)
+			{
 
-		Color customColor = tileColors[colorCounter];
-		GetComponent<Renderer>().material.color = customColor;
+			}
+
+			if (Random.Range(0, 101) > 20)
+			{
+				Instantiate(powerUpPrefab, transform.position, Quaternion.identity);
+			}
+			return;
+		}
+
+
+		//Color customColor = tileColors[colorCounter];
+		//GetComponent<Renderer>().material.color = customColor;
 	}
 
 }

@@ -118,3 +118,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7ecadd00d4124c40babd537acd763fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  powerUpPrefab: {fileID: 1681238318239975444, guid: 855ef01573c107648852442e6ea7af2b, type: 3}
+  colorCounter: 0
