@@ -20,8 +20,7 @@ public class Tile : MonoBehaviour
 
 	private void Start()
 	{
-		Color customColor = tileColors[colorCounter];
-		GetComponent<Renderer>().material.color = customColor;
+		GetComponent<Renderer>().material.color = tileColors[colorCounter];
 	}
 
 	public void Hit(int hitStrength)
@@ -38,16 +37,11 @@ public class Tile : MonoBehaviour
 				return;
 			}
 
-			if (Random.Range(0, 101) > 20)
+			if (Random.Range(0, 101) < 50)
 			{
 				Instantiate(powerUpPrefab, transform.position, Quaternion.identity);
 			}
 			return;
 		}
-
-
-		//Color customColor = tileColors[colorCounter];
-		//GetComponent<Renderer>().material.color = customColor;
 	}
-
 }

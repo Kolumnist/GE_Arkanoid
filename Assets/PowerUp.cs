@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class PowerUp : MonoBehaviour
 {
@@ -23,7 +20,17 @@ public class PowerUp : MonoBehaviour
 	void Start()
 	{
 		velocity = new Vector3(fallSpeed, 0, 0);
-		power = (Power) Random.Range(0, 3);
+		power = (Power)Random.Range(0, 3);
+
+		switch (power)
+		{
+			case Power.TwinBalls:
+				gameObject.GetComponent<Renderer>().material.color = new Color(0.65f, 1, 0.35f, 1);
+				break;
+			case Power.StrongBall:
+				gameObject.GetComponent<Renderer>().material.color = new Color(1, 0.35f, 0.3f, 1);
+				break;
+		}
 
 		transform.position = new Vector3(transform.position.x, 0.5f, transform.position.z);
 		transform.rotation = Quaternion.Euler(new Vector3(0, 90, 90));
@@ -45,20 +52,20 @@ public class PowerUp : MonoBehaviour
 		switch (power)
 		{
 			case Power.BiggerPaddle:
-				other.transform.localScale += new Vector3(1, 0, 0);
-				other.gameObject.GetComponent<Paddle>().setMaxAbsolute();
-				Invoke(nameof(TimeUpBiggerPaddle), 6);
+				GameManager.Instance.paddle.localScale += new Vector3(1, 0, 0);
+				GameManager.Instance.paddle.gameObject.GetComponent<Paddle>().setMaxAbsolute();
+				Invoke(nameof(TimeUpBiggerPaddle), 8);
 				break;
 
 			case Power.TwinBalls:
-				Instantiate(ballCopyPrefab, transform.position, Quaternion.identity);
+				Instantiate(ballCopyPrefab, new Vector3(transform.position.x + 0.15f, 0, transform.position.z), Quaternion.identity);
 				Destroy(gameObject, 2);
 				break;
 
 			case Power.StrongBall:
 				GameManager.Instance.ball.GetComponentInChildren<Light>().color = Color.red;
-				GameManager.Instance.ball.GetComponent<Ball>().hitStrength = 3;
-				Invoke(nameof(TimeUpStrongBall), 6);
+				GameManager.Instance.ball.GetComponent<Ball>().hitStrength += 2;
+				Invoke(nameof(TimeUpStrongBall), 8);
 				break;
 
 			default: break;
@@ -70,8 +77,10 @@ public class PowerUp : MonoBehaviour
 
 	private void TimeUpStrongBall()
 	{
-		GameManager.Instance.ball.GetComponentInChildren<Light>().color = new Color(255, 0, 255, 255);
-		GameManager.Instance.ball.GetComponent<Ball>().hitStrength = 1;
+		GameManager.Instance.ball.GetComponent<Ball>().hitStrength -= 2;
+		if (GameManager.Instance.ball.GetComponent<Ball>().hitStrength == 1)
+			GameManager.Instance.ball.GetComponentInChildren<Light>().color = new Color(255, 0, 255, 255);
+		Destroy(gameObject);
 	}
 
 	private void TimeUpBiggerPaddle()

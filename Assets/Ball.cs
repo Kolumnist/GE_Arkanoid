@@ -3,7 +3,6 @@ using UnityEngine;
 public class Ball : MonoBehaviour
 {
     public float startSpeed;
-	public float paddleDeviation;
 	public int hitStrength;
 
     private Vector3 velocity;
@@ -11,7 +10,7 @@ public class Ball : MonoBehaviour
 	{
 		get => velocity;
 		set =>
-			velocity = new Vector3(startSpeed, 0, 0);
+			velocity = value;
 	}
 
 	// Start is called before the first frame update
@@ -28,19 +27,16 @@ public class Ball : MonoBehaviour
 
 	private void OnTriggerEnter(Collider other)
 	{
-		//GetComponent<AudioSource>().Play();
+		GetComponent<AudioSource>().Play();
 		switch (other.transform.tag)
         {
             case ("Paddle"):
 				float actualDistance = transform.position.z - other.transform.position.z;
 				float maxDistance = transform.localScale.z * 0.5f + other.transform.localScale.z * 0.5f;
 				float normalizedDistance = actualDistance / maxDistance;
-
-				float angle = paddleDeviation*(Mathf.PI / 4) * normalizedDistance;
-				velocity.z = velocity.magnitude * Mathf.Sin(angle);
-				velocity.x = velocity.magnitude * Mathf.Cos(angle);
-
-				velocity /= Mathf.Abs(velocity.magnitude / -startSpeed);
+				velocity.z = (-startSpeed*normalizedDistance)*0.5f;
+				velocity.x = -startSpeed;
+				//velocity /= Mathf.Abs(velocity.magnitude / -startSpeed);
 				return;
 
 			case ("Wall"):
