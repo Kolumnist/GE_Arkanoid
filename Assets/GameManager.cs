@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -23,12 +24,27 @@ public class GameManager : MonoBehaviour
 	private TMP_Text loser;
 
 	[SerializeField]
+	private TMP_Text winner;
+
+	[SerializeField]
 	private GameObject tilePrefab;
 
 	public void LevelDone()
 	{
 		if(++Level.currentLevel < 3)
+		{
 			gameObject.GetComponent<Level>().LoadNewLevel();
+			return;
+		}
+		YouWin();
+	}
+
+	private void YouWin()
+	{
+		ball.gameObject.GetComponent<Ball>().enabled = false;
+		winner.text = winner.text + "\n" + "Score: " + score.text;
+		winner.gameObject.SetActive(true);
+		Invoke(nameof(GameEnds), 6);
 	}
 
 	private void Awake()
@@ -45,6 +61,9 @@ public class GameManager : MonoBehaviour
 
 	void Start()
 	{
+		enabled = false;
+		paddle.GetComponent<Paddle>().enabled = false;
+		ball.GetComponent<Ball>().enabled = false;
 	}
 
 	// Update is called once per frame
@@ -55,10 +74,10 @@ public class GameManager : MonoBehaviour
 			int newLifePoints = int.Parse(lifePoints.text[..1]) - 1;
 			if (newLifePoints == 0)
 			{
-				ball.gameObject.GetComponent<Ball>().startSpeed = 0;
+				ball.gameObject.GetComponent<Ball>().enabled = false;
 				loser.text = loser.text + "\n" + "Score: " + score.text;
 				loser.gameObject.SetActive(true);
-				Invoke(nameof(GameLost), 2);
+				Invoke(nameof(GameEnds), 3);
 			}
 
 			lifePoints.text = newLifePoints == 1 ? "1 Live left!" : newLifePoints + " Lives left";
@@ -67,13 +86,12 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
-	private void GameLost()
+	private void GameEnds()
 	{
 		Level.currentLevel = 0;
 		tileCount = 0;
 		SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 		loser.gameObject.SetActive(false);
-		Invoke(nameof(WaitForPlayerBrainToComprehendWhatHappened), 1);
 	}
 
 	private void ResetBall()

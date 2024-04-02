@@ -17,7 +17,7 @@ public class Ball : MonoBehaviour
 	void Start()
     {
         velocity = new Vector3(startSpeed, 0, 0);
-    }
+	}
 
     // Update is called once per frame
     void Update()
