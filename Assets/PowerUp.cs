@@ -58,7 +58,7 @@ public class PowerUp : MonoBehaviour
 				break;
 
 			case Power.TwinBalls:
-				Instantiate(ballCopyPrefab, new Vector3(transform.position.x + 0.15f, 0, transform.position.z), Quaternion.identity);
+				Instantiate(ballCopyPrefab, new Vector3(other.gameObject.transform.position.x, 0, other.gameObject.transform.position.z), Quaternion.identity);
 				Destroy(gameObject, 2);
 				break;
 
